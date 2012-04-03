@@ -1,5 +1,9 @@
 .classpath
 .project
 .settings/
+.gradle/
+bin/
+build/
 target/
+local.properties
 *.class

@@ -1,0 +1,50 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = 'com.abilitynetwork'
+version = '1.0.2'
+
+sourceCompatibility=1.6
+
+def props = new Properties();
+def localProperties = new File("local.properties")
+if (localProperties.exists()) localProperties.withInputStream { props.load(it) }
+
+configurations {
+    deployerJars
+}
+
+repositories {
+   mavenCentral()
+}
+
+dependencies {
+    compile 'redis.clients:jedis:2.0.0'
+    compile 'commons-pool:commons-pool:1.5.6'
+    compile 'org.slf4j:slf4j-api:1.6.4'
+    compile 'org.codehaus.jackson:jackson-core-asl:1.9.2'
+    compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.2'
+
+    testCompile 'junit:junit:4.10'
+
+    testRuntime 'ch.qos.logback:logback-classic:1.0.0'
+
+    deployerJars 'org.apache.maven.wagon:wagon-ssh:2.1'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            configuration = configurations.deployerJars
+            repository(url: props.get('maven.repository.url')) {
+                authentication(userName: props.get('maven.repository.user'), password: props.get('maven.repository.password'))
+            }
+        }
+    }
+}
+
+task createWrapper(type: Wrapper) {
+    gradleVersion = '1.0-milestone-6'
+}
+
