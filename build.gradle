@@ -33,6 +33,22 @@ dependencies {
     deployerJars 'org.apache.maven.wagon:wagon-ssh:2.1'
 }
 
+task packageJavadoc(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+
+task packageSources(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives jar
+    archives packageJavadoc
+    archives packageSources
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {
