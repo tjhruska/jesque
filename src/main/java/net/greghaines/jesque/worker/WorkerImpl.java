@@ -415,7 +415,7 @@ public class WorkerImpl implements Worker {
         }
     }
 
-    private String pop(final String curQueue) {
+    protected String pop(final String curQueue) {
         final String key = key(QUEUE, curQueue);
         String payload = null;
         // If a delayed queue, peek and remove from ZSET
